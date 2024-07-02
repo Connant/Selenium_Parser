@@ -41,6 +41,7 @@ for link_index, link in enumerate(all_links):
     height = driver.execute_script("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);")
     driver.set_window_size(width, height)
 
+    time.sleep(3)
     # Делаем скриншот
     page_body = driver.find_element(By.TAG_NAME, "body")
 
@@ -48,7 +49,11 @@ for link_index, link in enumerate(all_links):
     parsed_url = urlparse(link)
     path_parts = parsed_url.path.strip('/').split('/')
     
-    if len(path_parts) == 1:
+    if 'chat/examples' in link:
+        directory = 'examples'
+    elif 'case' in link:
+        directory = 'case'
+    elif len(path_parts) == 1:
         directory = "general"
     else:
         directory = path_parts[0]
@@ -57,7 +62,7 @@ for link_index, link in enumerate(all_links):
     create_directory(directory)
     
     # Имя файла скриншота
-    screenshot_name = "cq_" + "_".join(path_parts) + ".png"
+    screenshot_name = "".join(path_parts) + ".png"
     screenshot_path = os.path.join(directory, screenshot_name)
     
     # Сохраняем скриншот
